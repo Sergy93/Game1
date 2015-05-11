@@ -7,7 +7,7 @@ namespace _03___FadeInOut
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
-    public class Game1 : Game
+    public class FadeInOutGame : Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -19,7 +19,7 @@ namespace _03___FadeInOut
         private double mFadeDelay;
         private double mFadeDelayBase = .0001;
 
-        public Game1()
+        public FadeInOutGame()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
