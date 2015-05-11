@@ -38,6 +38,7 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Fireball.cs" />
     <Compile Include="Wizard.cs" />
     <Compile Include="WizardGame.cs" />
     <Compile Include="Program.cs" />
@@ -51,11 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Sprites\Background01.png" />
-    <Content Include="Content\Sprites\Background02.png" />
-    <Content Include="Content\Sprites\Background03.png" />
-    <Content Include="Content\Sprites\Background04.png" />
-    <Content Include="Content\Sprites\Background05.png" />
+    <Content Include="Content\Sprites\Fireball.png" />
     <Content Include="Content\Sprites\WizardSquare.png" />
     <Content Include="Icon.ico" />
   </ItemGroup>

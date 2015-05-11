@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace GameHelpers
+namespace GameHelpers.Classes
 {
     public class Sprite
     {
@@ -12,7 +12,7 @@ namespace GameHelpers
 
         public Rectangle Size { get; set; }
 
-        public string AssetName { get; set; }
+        public string AssetName;
 
         private Rectangle mSourceOnSprite;
         private float mScale;
@@ -72,10 +72,11 @@ namespace GameHelpers
         }
 
         //DRAW
-        public void Draw(SpriteBatch spriteBatch, SpriteEffects effect = SpriteEffects.None)
+        public virtual void Draw(SpriteBatch spriteBatch, SpriteEffects effect = SpriteEffects.None)
         {
             spriteBatch.Draw(SpriteTexture, Position, SourceOnSprite,
                 Color.White, 0.0f, Vector2.Zero, Scale, effect, 0);
         }
+
     }
 }

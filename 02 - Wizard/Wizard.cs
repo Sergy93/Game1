@@ -1,4 +1,10 @@
-﻿using GameHelpers;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using GameHelpers;
+using GameHelpers.Classes;
+using GameHelpers.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -6,12 +12,8 @@ using Microsoft.Xna.Framework.Input;
 
 namespace _02___Wizard
 {
-    class Wizard : Sprite
+    class Wizard : Sprite, IMover, IJumper
     {
-        public Wizard()
-            : base(Assetname, StartY, StartX)
-        {
-        }
 
         #region Constants
 
@@ -35,12 +37,21 @@ namespace _02___Wizard
         private State currState = State.Walking;
 
         private Vector2 vDirection = Vector2.Zero;
+        private bool lookingRight;
         private Vector2 vSpeed = Vector2.Zero;
 
-        //Used for jumping
-        private Vector2 startingPosition;
+        public List<Fireball> Fireballs = new List<Fireball>();
 
         private KeyboardState prevKeyboardState;
+
+        private ContentManager contentManager;
+
+        //Used for jumping
+        public Vector2 StartingPosition { get; set; }
+
+        public Vector2 Speed { get; set; }
+
+        public Vector2 Direction { get; set; }
 
         private enum State
         {
@@ -49,12 +60,21 @@ namespace _02___Wizard
             Ducking,
         }
 
-        //LOAD
-        public void LoadContent(ContentManager contentManager)
+        public Wizard()
+            : base(Assetname, StartY, StartX)
         {
+            StartingPosition = new Vector2(StartX, StartY);
+        }
+
+
+        //LOAD
+        public void LoadContent(ContentManager contentMg)
+        {
+
+            contentManager = contentMg;
             Position = new Vector2(StartY, StartX);
 
-            base.LoadContent(contentManager);
+            base.LoadContent(contentMg);
             SourceOnSprite = new Rectangle(0, 0, 200, SourceOnSprite.Height);
         }
 
@@ -76,6 +96,8 @@ namespace _02___Wizard
 
             UpdateDuck(currKeyboardState);
 
+            UpdateFireballs(theGameTime, currKeyboardState);
+
             prevKeyboardState = currKeyboardState;
 
             base.Update(theGameTime, vSpeed, vDirection);
@@ -85,12 +107,18 @@ namespace _02___Wizard
         public void Draw(SpriteBatch spriteBatch)
         {
             var effect = SpriteEffects.None;
-            if (vDirection.X == 1)
+            if (lookingRight)
             {
                 effect = SpriteEffects.FlipHorizontally;
             }
+            foreach (var aFireball in Fireballs)
+            {
+                aFireball.Draw(spriteBatch);
+            }
+
             base.Draw(spriteBatch, effect);
         }
+
 
 
         //MOVEMENT
@@ -98,11 +126,13 @@ namespace _02___Wizard
         {
             if (currKeyboardState.IsKeyDown(Keys.Left))
             {
+                lookingRight = false;
                 vSpeed.X = MoveSpeed;
                 vDirection.X = MoveLeft;
             }
             else if (currKeyboardState.IsKeyDown(Keys.Right))
             {
+                lookingRight = true;
                 vSpeed.X = MoveSpeed;
                 vDirection.X = MoveRight;
             }
@@ -119,7 +149,7 @@ namespace _02___Wizard
                     {
                         currState = State.Jumping;
 
-                        startingPosition = Position;
+                        StartingPosition = Position;
 
                         vDirection.Y = MoveUp;
 
@@ -128,13 +158,13 @@ namespace _02___Wizard
                     break;
 
                 case State.Jumping:
-                    if (startingPosition.Y - Position.Y > JumpHeight)
+                    if (StartingPosition.Y - Position.Y > JumpHeight)
                     {
                         vDirection.Y = MoveDown;
                     }
-                    if (Position.Y > startingPosition.Y)
+                    if (Position.Y > StartingPosition.Y)
                     {
-                        Position.Y = startingPosition.Y;
+                        Position.Y = StartingPosition.Y;
                         currState = State.Walking;
                     }
                     break;
@@ -147,17 +177,45 @@ namespace _02___Wizard
         {
             if (currKeyboardState.IsKeyDown(Keys.LeftShift))
             {
-                if (currState == State.Walking)
-                {
-                    SourceOnSprite = new Rectangle(200, 0, 200, SourceOnSprite.Height);
-                    currState = State.Ducking;
-                }
+                if (currState != State.Walking) return;
+
+                SourceOnSprite = new Rectangle(200, 0, 200, SourceOnSprite.Height);
+                currState = State.Ducking;
             }
             else if (currState == State.Ducking)
             {
                 SourceOnSprite = new Rectangle(0, 0, 200, SourceOnSprite.Height);
                 currState = State.Walking;
             }
+        }
+
+        private void UpdateFireballs(GameTime theGameTime, KeyboardState aCurrentKeyboardState)
+        {
+            foreach (var fireball in Fireballs)
+            {
+                fireball.Update(theGameTime);
+            }
+
+            if (currState != State.Walking ||
+                !aCurrentKeyboardState.IsKeyDown(Keys.RightControl) ||
+                prevKeyboardState.IsKeyDown(Keys.RightControl))
+                return;
+
+
+            if (Fireballs.All(fb => fb.Visible))
+            {
+                var aFireball = new Fireball();
+                aFireball.LoadContent(contentManager);
+
+                Fireballs.Add(aFireball);
+            }
+
+            var direction = lookingRight ? new Vector2(1, 0) : new Vector2(-1, 0);
+            foreach (var fireball in Fireballs.Where(fb => fb.Visible == false))
+            {
+                fireball.Fire(Position + new Vector2(Size.Width / 3, Size.Height / 2), new Vector2(200, 0), direction);
+            }
+
         }
 
     }

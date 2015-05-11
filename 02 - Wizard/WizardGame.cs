@@ -12,7 +12,7 @@ namespace _02___Wizard
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        Wizard wizard = new Wizard();
+        readonly Wizard wizard = new Wizard();
 
         public WizardGame()
         {

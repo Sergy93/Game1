@@ -5,6 +5,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 using GameHelpers;
+using GameHelpers.Classes;
+using GameHelpers.Extensions;
 
 
 namespace ScrollBox
@@ -62,7 +64,7 @@ namespace ScrollBox
                 sprite.LoadContent(Content, backgScale);
             }
 
-            GameElements.First(o => o.AssetName == "SquareGuy").LoadContent(Content);
+            GameElements.First(o => o.AssetName == MainCharacter.AssetName).LoadContent(Content);
 
             _mBackgroundOne.Position = new Vector2(-_mBackgroundOne.SpriteTexture.Width, 0);
             _mBackgroundTwo.Position = new Vector2(_mBackgroundOne.Position.X + _mBackgroundOne.Size.Width, 0);
