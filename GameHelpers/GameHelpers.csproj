@@ -41,10 +41,9 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Classes\MovingSprite.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Interfaces\IJumper.cs" />
-    <Compile Include="Interfaces\IMover.cs" />
-    <Compile Include="Interfaces\IShootable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Classes\Sprite.cs" />
   </ItemGroup>

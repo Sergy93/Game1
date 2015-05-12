@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace _02___Wizard
 {
-    class Fireball : Sprite, IMover, IShootable
+    public class Fireball : MovingSprite
     {
         private const string Assetname = "Fireball";
 
@@ -20,25 +20,22 @@ namespace _02___Wizard
         public bool Visible;
 
         public Vector2 StartingPosition { get; set; }
-        public Vector2 Speed { get; set; }
-
-        public Vector2 Direction { get; set; }
 
 
         public Fireball()
-            : base(Assetname)
+            : base(Assetname, Vector2.Zero, Vector2.Zero, Vector2.Zero)
         {
         }
 
 
-        public void LoadContent(ContentManager theContentManager)
+        public override void LoadContent(ContentManager theContentManager)
         {
             Scale = 0.3f;
             MaxDistance = 300;
-            base.LoadContent(theContentManager, Scale);
+            base.LoadContent(theContentManager);
         }
 
-        public void Update(GameTime theGameTime)
+        public override void Update(GameTime theGameTime)
         {
             if (Vector2.Distance(StartingPosition, Position) > MaxDistance)
             {
@@ -47,7 +44,7 @@ namespace _02___Wizard
 
             if (Visible)
             {
-                base.Update(theGameTime, Speed, Direction);
+                base.Update(theGameTime);
             }
         }
 

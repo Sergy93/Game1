@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using GameHelpers;
 using GameHelpers.Classes;
 using GameHelpers.Interfaces;
@@ -12,7 +13,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace _02___Wizard
 {
-    class Wizard : Sprite, IMover, IJumper
+    class Wizard : MovingSprite, IJumper
     {
 
         #region Constants
@@ -36,9 +37,7 @@ namespace _02___Wizard
 
         private State currState = State.Walking;
 
-        private Vector2 vDirection = Vector2.Zero;
         private bool lookingRight;
-        private Vector2 vSpeed = Vector2.Zero;
 
         public List<Fireball> Fireballs = new List<Fireball>();
 
@@ -49,10 +48,6 @@ namespace _02___Wizard
         //Used for jumping
         public Vector2 StartingPosition { get; set; }
 
-        public Vector2 Speed { get; set; }
-
-        public Vector2 Direction { get; set; }
-
         private enum State
         {
             Walking,
@@ -61,14 +56,15 @@ namespace _02___Wizard
         }
 
         public Wizard()
-            : base(Assetname, StartY, StartX)
+            : base(Assetname, new Vector2(StartX, StartY), new Vector2(MoveSpeed, 0), Vector2.Zero)
         {
             StartingPosition = new Vector2(StartX, StartY);
+
         }
 
 
         //LOAD
-        public void LoadContent(ContentManager contentMg)
+        public override void LoadContent(ContentManager contentMg)
         {
 
             contentManager = contentMg;
@@ -80,14 +76,14 @@ namespace _02___Wizard
 
 
         //UPDATE
-        public void Update(GameTime theGameTime)
+        public override void Update(GameTime theGameTime)
         {
             var currKeyboardState = Keyboard.GetState();
 
             if (currState != State.Jumping)
             {
-                vSpeed = Vector2.Zero;
-                vDirection = Vector2.Zero;
+                Speed = Vector2.Zero;
+                Direction = Vector2.Zero;
             }
 
             UpdateHorizontalMovement(currKeyboardState);
@@ -100,7 +96,7 @@ namespace _02___Wizard
 
             prevKeyboardState = currKeyboardState;
 
-            base.Update(theGameTime, vSpeed, vDirection);
+            base.Update(theGameTime);
         }
 
         //DRAW
@@ -127,14 +123,14 @@ namespace _02___Wizard
             if (currKeyboardState.IsKeyDown(Keys.Left))
             {
                 lookingRight = false;
-                vSpeed.X = MoveSpeed;
-                vDirection.X = MoveLeft;
+                Speed.X = MoveSpeed;
+                Direction.X = MoveLeft;
             }
             else if (currKeyboardState.IsKeyDown(Keys.Right))
             {
                 lookingRight = true;
-                vSpeed.X = MoveSpeed;
-                vDirection.X = MoveRight;
+                Speed.X = MoveSpeed;
+                Direction.X = MoveRight;
             }
         }
 
@@ -151,16 +147,16 @@ namespace _02___Wizard
 
                         StartingPosition = Position;
 
-                        vDirection.Y = MoveUp;
+                        Direction.Y = MoveUp;
 
-                        vSpeed = new Vector2(MoveSpeed, MoveSpeed);
+                        Speed = new Vector2(MoveSpeed, MoveSpeed);
                     }
                     break;
 
                 case State.Jumping:
                     if (StartingPosition.Y - Position.Y > JumpHeight)
                     {
-                        vDirection.Y = MoveDown;
+                        Direction.Y = MoveDown;
                     }
                     if (Position.Y > StartingPosition.Y)
                     {

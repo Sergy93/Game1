@@ -34,15 +34,17 @@ namespace ScrollBox
 
         protected override void Initialize()
         {
-            MainCharacter = new Sprite("SquareGuy");
+            MainCharacter = new MovingSprite("SquareGuy", Vector2.Zero, Vector2.One, new Vector2(1, 0));
+
+            var backgScale = 2.0f;
 
             BackgroundElements.AddMany(new[]
            {
-                  _mBackgroundOne   = new Sprite("Background01"),
-                  _mBackgroundTwo   = new Sprite("Background02"),
-                  _mBackgroundThree = new Sprite("Background03"),
-                  _mBackgroundFour  = new Sprite("Background04"),
-                  _mBackgroundFive  = new Sprite("Background05"),
+                  _mBackgroundOne   = new Sprite("Background01",Vector2.Zero,backgScale),
+                  _mBackgroundTwo   = new Sprite("Background02",Vector2.Zero,backgScale),
+                  _mBackgroundThree = new Sprite("Background03",Vector2.Zero,backgScale),
+                  _mBackgroundFour  = new Sprite("Background04",Vector2.Zero,backgScale),
+                  _mBackgroundFive  = new Sprite("Background05",Vector2.Zero,backgScale),
            });
 
             GameElements.AddMany(BackgroundElements.ToArray());
@@ -57,16 +59,15 @@ namespace ScrollBox
         {
             SpriteBatch = new SpriteBatch(GraphicsDevice);
 
-            var backgScale = 2.0f;
 
             foreach (var sprite in BackgroundElements)
             {
-                sprite.LoadContent(Content, backgScale);
+                sprite.LoadContent(Content);
             }
 
             GameElements.First(o => o.AssetName == MainCharacter.AssetName).LoadContent(Content);
 
-            _mBackgroundOne.Position = new Vector2(-_mBackgroundOne.SpriteTexture.Width, 0);
+            _mBackgroundOne.Position = new Vector2(-_mBackgroundOne.Size.Width, 0);
             _mBackgroundTwo.Position = new Vector2(_mBackgroundOne.Position.X + _mBackgroundOne.Size.Width, 0);
             _mBackgroundThree.Position = new Vector2(_mBackgroundTwo.Position.X + _mBackgroundTwo.Size.Width, 0);
             _mBackgroundFour.Position = new Vector2(_mBackgroundThree.Position.X + _mBackgroundThree.Size.Width, 0);
@@ -91,7 +92,7 @@ namespace ScrollBox
 
             var deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            if (_mBackgroundOne.Position.X < -_mBackgroundOne.Size.Width)
+            if (_mBackgroundOne.Position.X < -_mBackgroundOne.SpriteTexture.Width)
             {
                 _mBackgroundOne.Position.X = _mBackgroundFive.Position.X + _mBackgroundFive.Size.Width;
             }

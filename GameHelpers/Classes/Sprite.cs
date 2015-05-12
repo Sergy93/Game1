@@ -8,9 +8,9 @@ namespace GameHelpers.Classes
     {
         public Vector2 Position;
 
-        public Texture2D SpriteTexture { get; set; }
+        public Texture2D SpriteTexture { get; protected set; }
 
-        public Rectangle Size { get; set; }
+        public Rectangle Size { get; protected set; }
 
         public string AssetName;
 
@@ -41,34 +41,27 @@ namespace GameHelpers.Classes
         }
 
         //CONSTRUCTORS
-        public Sprite(string initialAsset, int posX = 0, int posY = 0)
+        public Sprite(string initialAsset, Vector2 position, float scale = 1.0f)
         {
             AssetName = initialAsset;
-            Position = new Vector2(posX, posY);
+            Position = position;
+            Scale = scale;
         }
 
-        public Sprite(string initialAsset, Vector2 initialPos)
-        {
-            AssetName = initialAsset;
-            Position = initialPos;
-        }
 
 
         //LOAD
-        public void LoadContent(ContentManager contentmanager, float scale = 1.0f)
+        public virtual void LoadContent(ContentManager contentmanager)
         {
             SpriteTexture = contentmanager.Load<Texture2D>("Sprites/" + AssetName);
-            Scale = scale;
             SourceOnSprite = new Rectangle(0, 0, SpriteTexture.Width, SpriteTexture.Height);
         }
 
 
         //UPDATE
-        protected void Update(GameTime theGameTime, Vector2 speed, Vector2 direction)
+        public virtual void Update(GameTime theGameTime)
         {
-            var deltaTime = (float)theGameTime.ElapsedGameTime.TotalSeconds;
 
-            Position += direction * speed * deltaTime;
         }
 
         //DRAW
