@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -6,12 +7,16 @@ namespace _06___DriveFast
 {
     public class DriveFastGame : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
 
-        RoadManager roadMng = new RoadManager();
+        public static float WindowHeight;
+        public static float WindowWidth;
+
+        private GraphicsDeviceManager graphics;
+
+        private SpriteBatch spriteBatch;
+
+        private RoadManager RoadManager;
         private Car Car;
-        private Vector2 Speed = new Vector2(0, 1);
 
         public DriveFastGame()
         {
@@ -20,6 +25,8 @@ namespace _06___DriveFast
         }
         protected override void Initialize()
         {
+
+
             base.Initialize();
         }
 
@@ -27,19 +34,23 @@ namespace _06___DriveFast
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            roadMng.LoadContent(Content);
+            RoadManager = new RoadManager();
 
-            graphics.PreferredBackBufferHeight = roadMng.SpriteTexture.Height;
-            graphics.PreferredBackBufferWidth = roadMng.SpriteTexture.Width;
+            RoadManager.LoadContent(Content);
+
+            graphics.PreferredBackBufferHeight = RoadManager.roadTexture.Height;
+            graphics.PreferredBackBufferWidth = RoadManager.roadTexture.Width;
             graphics.ApplyChanges();
 
+            WindowHeight = graphics.PreferredBackBufferHeight;
+            WindowWidth = graphics.PreferredBackBufferWidth;
 
-            Car = new Car(new Vector2(0, 0), Speed, new Vector2(0, -1));
+            Car = new Car(Vector2.Zero, Vector2.Zero, new Vector2(0, -1));
 
-            var posX = graphics.PreferredBackBufferWidth / 2 - Car.Size.Width * 2;
-            var posY = graphics.PreferredBackBufferHeight - Car.Size.Height;
+            var posX = WindowWidth / 2 - Car.Size.Width * 2;
+            var posY = WindowHeight - Car.Size.Height;
 
-            Car.Position = new Vector2(posX, posY - 100);
+            Car.Position = new Vector2(posX - 100, posY - 200);
 
             Car.LoadContent(Content);
 
@@ -56,7 +67,7 @@ namespace _06___DriveFast
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            roadMng.Update(gameTime, 1);
+            RoadManager.Update(gameTime);
             Car.Update(gameTime);
 
             base.Update(gameTime);
@@ -68,7 +79,7 @@ namespace _06___DriveFast
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
 
-            roadMng.Draw(spriteBatch);
+            RoadManager.Draw(spriteBatch);
             Car.Draw(spriteBatch);
 
             spriteBatch.End();

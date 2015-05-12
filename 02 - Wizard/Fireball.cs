@@ -48,7 +48,7 @@ namespace _02___Wizard
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)
         {
             var effect = Direction.X.Equals(1) ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
             if (Visible)

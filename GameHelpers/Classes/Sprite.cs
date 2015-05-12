@@ -65,7 +65,12 @@ namespace GameHelpers.Classes
         }
 
         //DRAW
-        public virtual void Draw(SpriteBatch spriteBatch, SpriteEffects effect = SpriteEffects.None)
+        public virtual void Draw(SpriteBatch spriteBatch)
+        {
+            Draw(spriteBatch, SpriteEffects.None);
+        }
+
+        public virtual void Draw(SpriteBatch spriteBatch, SpriteEffects effect)
         {
             spriteBatch.Draw(SpriteTexture, Position, SourceOnSprite,
                 Color.White, 0.0f, Vector2.Zero, Scale, effect, 0);
