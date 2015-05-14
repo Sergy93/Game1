@@ -1,24 +1,27 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.Linq;
+using GameHelpers.Classes.Attributes;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace GameHelpers.Classes
 {
-    public class Sprite
+    public abstract class Sprite
     {
-        public Vector2 Position;
-
         public Texture2D SpriteTexture { get; protected set; }
 
         public Rectangle Size { get; protected set; }
 
-        public string AssetName;
+        public Vector2 Position;
 
-        private Rectangle mSourceOnSprite;
-        private float mScale;
+        protected string AssetName { get; set; }
+
+        private GraphicsDeviceManager graphics;
 
 
         //Properties
+        private Rectangle mSourceOnSprite;
         public Rectangle SourceOnSprite
         {
             get { return mSourceOnSprite; }
@@ -29,6 +32,9 @@ namespace GameHelpers.Classes
             }
         }
 
+
+
+        private float mScale;
         public float Scale
         {
             get { return mScale; }
@@ -40,15 +46,23 @@ namespace GameHelpers.Classes
             }
         }
 
+
         //CONSTRUCTORS
-        public Sprite(string initialAsset, Vector2 position, float scale = 1.0f)
+        protected Sprite(Vector2 position, float scale = 1.0f)
         {
-            AssetName = initialAsset;
+
+            var thisType = GetType();
+
+            if (thisType.IsDefined(typeof(AssetNameAttr), false) == false)
+            {
+                throw new InvalidOperationException("Must implement AssetNameAttr");
+            }
+
+
+            AssetName = GetAssetName(thisType);
             Position = position;
             Scale = scale;
         }
-
-
 
         //LOAD
         public virtual void LoadContent(ContentManager contentmanager)
@@ -76,5 +90,12 @@ namespace GameHelpers.Classes
                 Color.White, 0.0f, Vector2.Zero, Scale, effect, 0);
         }
 
+
+        public static string GetAssetName(Type type)
+        {
+            var attribute = type.GetCustomAttributes(typeof(AssetNameAttr), true)[0];
+
+            return ((AssetNameAttr)attribute).AssetName;
+        }
     }
 }

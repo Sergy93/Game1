@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using GameHelpers;
 using GameHelpers.Classes;
+using GameHelpers.Classes.Attributes;
 using GameHelpers.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -11,22 +12,19 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace _02___Wizard
 {
+    [AssetNameAttr("Fireball")]
     public class Fireball : MovingSprite
     {
-        private const string Assetname = "Fireball";
-
         public int MaxDistance { get; set; }
 
         public bool Visible;
 
         public Vector2 StartingPosition { get; set; }
 
-
         public Fireball()
-            : base(Assetname, Vector2.Zero, Vector2.Zero, Vector2.Zero)
+            : base(Vector2.Zero, Vector2.Zero, Vector2.Zero)
         {
         }
-
 
         public override void LoadContent(ContentManager theContentManager)
         {

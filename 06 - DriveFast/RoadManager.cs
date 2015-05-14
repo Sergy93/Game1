@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using GameHelpers.Classes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -10,33 +11,33 @@ namespace _06___DriveFast
 {
     public class RoadManager
     {
-
         //public List<Road> Roads = new List<Road>();
 
         public Road[] Roads;
 
         private ContentManager contentManager;
 
-        public Vector2 Speed = new Vector2(0, 100);
-
-        public static Texture2D roadTexture;
+        public static Texture2D RoadTexture;
+        public static Texture2D HazardTexture;
 
 
         public void LoadContent(ContentManager theContentManager)
         {
             contentManager = theContentManager;
 
-            roadTexture = contentManager.Load<Texture2D>("Sprites/" + Road.Asset);
-
-
+            RoadTexture = contentManager.Load<Texture2D>("Sprites/" + Sprite.GetAssetName(typeof(Road)));
+            HazardTexture = contentManager.Load<Texture2D>("Sprites/" + Sprite.GetAssetName(typeof(Hazard)));
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime, float speed)
         {
             if (Roads != null)
             {
                 foreach (var road in Roads)
                 {
+
+                    road.Speed.Y = speed > 0 ? speed : 0;
+
                     if (road.Position.Y > DriveFastGame.WindowHeight)
                     {
                         var minY = Roads.Min(r => r.Position.Y);
@@ -49,10 +50,11 @@ namespace _06___DriveFast
             }
             else
             {
+
                 Roads = new Road[2];
 
-                Roads[0] = new Road(Speed, Vector2.Zero);
-                Roads[1] = new Road(Speed, new Vector2(0, -DriveFastGame.WindowHeight+2));
+                Roads[0] = new Road(Vector2.Zero, Vector2.Zero);
+                Roads[1] = new Road(Vector2.Zero, new Vector2(0, -DriveFastGame.WindowHeight + 2));
 
                 foreach (var road in Roads)
                 {
@@ -68,6 +70,7 @@ namespace _06___DriveFast
                 road.Draw(spriteBatch);
             }
         }
+
     }
 }
 

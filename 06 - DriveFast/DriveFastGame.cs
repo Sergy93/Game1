@@ -38,8 +38,8 @@ namespace _06___DriveFast
 
             RoadManager.LoadContent(Content);
 
-            graphics.PreferredBackBufferHeight = RoadManager.roadTexture.Height;
-            graphics.PreferredBackBufferWidth = RoadManager.roadTexture.Width;
+            graphics.PreferredBackBufferHeight = RoadManager.RoadTexture.Height;
+            graphics.PreferredBackBufferWidth = RoadManager.RoadTexture.Width;
             graphics.ApplyChanges();
 
             WindowHeight = graphics.PreferredBackBufferHeight;
@@ -67,7 +67,7 @@ namespace _06___DriveFast
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            RoadManager.Update(gameTime);
+            RoadManager.Update(gameTime, Car.Speed.Y);
             Car.Update(gameTime);
 
             base.Update(gameTime);

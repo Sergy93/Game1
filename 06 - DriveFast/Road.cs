@@ -1,22 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Dynamic;
 using System.Linq;
 using GameHelpers.Classes;
+using GameHelpers.Classes.Attributes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace _06___DriveFast
 {
+    [AssetNameAttr("Road")]
     public class Road : MovingSprite
     {
-
-        //Float value is the y position
-        public const string Asset = "Road";
-
         public Road(Vector2 speed, Vector2 position)
-            : base(Asset, position, speed, new Vector2(1, 1))
+            : base(position, speed, new Vector2(1, 1))
         {
+
         }
 
     }

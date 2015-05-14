@@ -41,7 +41,9 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Classes\Attributes\AssetNameAttr.cs" />
     <Compile Include="Classes\MovingSprite.cs" />
+    <Compile Include="Classes\FixedSprite.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Interfaces\IJumper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

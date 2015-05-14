@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using GameHelpers;
 using GameHelpers.Classes;
+using GameHelpers.Classes.Attributes;
 using GameHelpers.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -13,27 +14,16 @@ using Microsoft.Xna.Framework.Input;
 
 namespace _02___Wizard
 {
+    [AssetNameAttr("WizardSquare")]
     class Wizard : MovingSprite, IJumper
     {
-
-        #region Constants
-
-        private const string Assetname = "WizardSquare";
-
         private const int StartY = 125;
+
         private const int StartX = 245;
 
-        private const int MoveSpeed = 160;
+        private const float MoveSpeed = 160;
 
         private const int JumpHeight = 150;
-
-        private const int MoveUp = -1;
-        private const int MoveDown = 1;
-        private const int MoveLeft = -1;
-        private const int MoveRight = 1;
-
-        #endregion
-
 
         private State currState = State.Walking;
 
@@ -56,7 +46,7 @@ namespace _02___Wizard
         }
 
         public Wizard()
-            : base(Assetname, new Vector2(StartX, StartY), new Vector2(MoveSpeed, 0), Vector2.Zero)
+            : base(new Vector2(StartX, StartY), new Vector2(MoveSpeed, 0), Vector2.Zero)
         {
             StartingPosition = new Vector2(StartX, StartY);
 
@@ -100,7 +90,7 @@ namespace _02___Wizard
         }
 
         //DRAW
-        public void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)
         {
             var effect = SpriteEffects.None;
             if (lookingRight)
@@ -124,13 +114,13 @@ namespace _02___Wizard
             {
                 lookingRight = false;
                 Speed.X = MoveSpeed;
-                Direction.X = MoveLeft;
+                Direction.X = MoveDirections.MoveLeft;
             }
             else if (currKeyboardState.IsKeyDown(Keys.Right))
             {
                 lookingRight = true;
                 Speed.X = MoveSpeed;
-                Direction.X = MoveRight;
+                Direction.X = MoveDirections.MoveRight;
             }
         }
 
@@ -147,7 +137,7 @@ namespace _02___Wizard
 
                         StartingPosition = Position;
 
-                        Direction.Y = MoveUp;
+                        Direction.Y = MoveDirections.MoveUp;
 
                         Speed = new Vector2(MoveSpeed, MoveSpeed);
                     }
@@ -156,7 +146,7 @@ namespace _02___Wizard
                 case State.Jumping:
                     if (StartingPosition.Y - Position.Y > JumpHeight)
                     {
-                        Direction.Y = MoveDown;
+                        Direction.Y = MoveDirections.MoveDown;
                     }
                     if (Position.Y > StartingPosition.Y)
                     {

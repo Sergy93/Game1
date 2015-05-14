@@ -34,17 +34,17 @@ namespace ScrollBox
 
         protected override void Initialize()
         {
-            MainCharacter = new MovingSprite("SquareGuy", Vector2.Zero, Vector2.One, new Vector2(1, 0));
+            MainCharacter = new Terrain("SquareGuy", Vector2.Zero);
 
             var backgScale = 2.0f;
 
             BackgroundElements.AddMany(new[]
            {
-                  _mBackgroundOne   = new Sprite("Background01",Vector2.Zero,backgScale),
-                  _mBackgroundTwo   = new Sprite("Background02",Vector2.Zero,backgScale),
-                  _mBackgroundThree = new Sprite("Background03",Vector2.Zero,backgScale),
-                  _mBackgroundFour  = new Sprite("Background04",Vector2.Zero,backgScale),
-                  _mBackgroundFive  = new Sprite("Background05",Vector2.Zero,backgScale),
+                  _mBackgroundOne   = new Terrain("Background01",Vector2.Zero,backgScale),
+                  _mBackgroundTwo   = new Terrain("Background02",Vector2.Zero,backgScale),
+                  _mBackgroundThree = new Terrain("Background03",Vector2.Zero,backgScale),
+                  _mBackgroundFour  = new Terrain("Background04",Vector2.Zero,backgScale),
+                  _mBackgroundFive  = new Terrain("Background05",Vector2.Zero,backgScale),
            });
 
             GameElements.AddMany(BackgroundElements.ToArray());
