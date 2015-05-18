@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using GameHelpers.Classes;
@@ -9,10 +10,12 @@ using Microsoft.Xna.Framework;
 namespace _06___DriveFast
 {
     [AssetNameAttr("Hazard")]
-    class Hazard : Sprite
+    public class Hazard : MovingSprite
     {
-        public Hazard(Vector2 position, float scale = 1)
-            : base(position, scale)
+
+        private readonly static Vector2 direction = new Vector2(0, MoveDirections.MoveDown);
+        public Hazard(Vector2 position, Vector2 speed)
+            : base(position, speed, direction, 0.7f)
         {
         }
     }

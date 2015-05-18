@@ -14,16 +14,21 @@ namespace _06___DriveFast
         //public List<Road> Roads = new List<Road>();
 
         public Road[] Roads;
+        public List<Hazard> Hazards = new List<Hazard>();
 
         private ContentManager contentManager;
+        private GraphicsDeviceManager graphics;
 
         public static Texture2D RoadTexture;
         public static Texture2D HazardTexture;
 
+        private readonly Random random = new Random();
 
-        public void LoadContent(ContentManager theContentManager)
+
+        public void LoadContent(ContentManager theContentManager, GraphicsDeviceManager theGraphics)
         {
             contentManager = theContentManager;
+            graphics = theGraphics;
 
             RoadTexture = contentManager.Load<Texture2D>("Sprites/" + Sprite.GetAssetName(typeof(Road)));
             HazardTexture = contentManager.Load<Texture2D>("Sprites/" + Sprite.GetAssetName(typeof(Hazard)));
@@ -31,6 +36,7 @@ namespace _06___DriveFast
 
         public void Update(GameTime gameTime, float speed)
         {
+
             if (Roads != null)
             {
                 foreach (var road in Roads)
@@ -38,7 +44,7 @@ namespace _06___DriveFast
 
                     road.Speed.Y = speed > 0 ? speed : 0;
 
-                    if (road.Position.Y > DriveFastGame.WindowHeight)
+                    if (road.Position.Y > graphics.PreferredBackBufferHeight)
                     {
                         var minY = Roads.Min(r => r.Position.Y);
 
@@ -50,16 +56,29 @@ namespace _06___DriveFast
             }
             else
             {
-
                 Roads = new Road[2];
 
                 Roads[0] = new Road(Vector2.Zero, Vector2.Zero);
-                Roads[1] = new Road(Vector2.Zero, new Vector2(0, -DriveFastGame.WindowHeight + 2));
+                Roads[1] = new Road(Vector2.Zero, new Vector2(0, -graphics.PreferredBackBufferHeight + 2));
 
                 foreach (var road in Roads)
                 {
                     road.LoadContent(contentManager);
                 }
+            }
+
+            if (random.Next(400) == 5)
+            {
+                var hazard = new Hazard(Vector2.Zero, new Vector2(0, speed));
+                hazard.LoadContent(contentManager);
+                hazard.Position = new Vector2(random.Next(graphics.PreferredBackBufferWidth), 0);
+                Hazards.Add(hazard);
+            }
+
+            foreach (var hazard in Hazards)
+            {
+                hazard.Update(gameTime);
+
             }
         }
 
@@ -68,6 +87,10 @@ namespace _06___DriveFast
             foreach (var road in Roads)
             {
                 road.Draw(spriteBatch);
+            }
+            foreach (var hazard in Hazards)
+            {
+                hazard.Draw(spriteBatch);
             }
         }
 

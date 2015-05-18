@@ -35,13 +35,13 @@ namespace _06___DriveFast
                 Direction = Vector2.Zero;
             }
 
-            MoveHorizontal(currKeyboardState);
+            Move(currKeyboardState);
 
             base.Update(theGameTime);
 
         }
 
-        public void MoveHorizontal(KeyboardState keyboardState)
+        public void Move(KeyboardState keyboardState)
         {
             if (keyboardState.IsKeyDown(Keys.Left))
             {
@@ -58,17 +58,24 @@ namespace _06___DriveFast
             {
                 Direction.Y = MoveDirections.MoveUp;
 
-                if (Speed.Y == 0f)
+                if (Position.Y > 0)
                 {
-                    Speed.Y = MinSpeed;
-                }
-                else if (Speed.Y <= MaxSpeed)
-                {
-                    Speed.Y += Acceleration;
+                    if (Speed.Y == 0f)
+                    {
+                        Speed.Y = MinSpeed;
+                    }
+                    else if (Speed.Y <= MaxSpeed)
+                    {
+                        Speed.Y += Acceleration;
+                    }
+                    else
+                    {
+                        Speed.Y = MaxSpeed;
+                    }
                 }
                 else
                 {
-                    Speed.Y = MaxSpeed;
+                    Speed = Vector2.Zero;
                 }
             }
             else if (keyboardState.IsKeyDown(Keys.Down))
@@ -76,7 +83,6 @@ namespace _06___DriveFast
                 Speed.Y = MinSpeed;
                 Direction.Y = MoveDirections.MoveDown;
             }
-            Debug.WriteLine(Speed.Y);
         }
 
 

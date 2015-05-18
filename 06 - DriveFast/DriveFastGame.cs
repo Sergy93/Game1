@@ -8,15 +8,14 @@ namespace _06___DriveFast
     public class DriveFastGame : Game
     {
 
-        public static float WindowHeight;
-        public static float WindowWidth;
-
-        private GraphicsDeviceManager graphics;
+        public GraphicsDeviceManager graphics;
 
         private SpriteBatch spriteBatch;
 
         private RoadManager RoadManager;
         private Car Car;
+
+        private float GameSpeed = 50;
 
         public DriveFastGame()
         {
@@ -36,19 +35,17 @@ namespace _06___DriveFast
 
             RoadManager = new RoadManager();
 
-            RoadManager.LoadContent(Content);
+            RoadManager.LoadContent(Content, graphics);
 
             graphics.PreferredBackBufferHeight = RoadManager.RoadTexture.Height;
             graphics.PreferredBackBufferWidth = RoadManager.RoadTexture.Width;
             graphics.ApplyChanges();
 
-            WindowHeight = graphics.PreferredBackBufferHeight;
-            WindowWidth = graphics.PreferredBackBufferWidth;
 
             Car = new Car(Vector2.Zero, Vector2.Zero, new Vector2(0, -1));
 
-            var posX = WindowWidth / 2 - Car.Size.Width * 2;
-            var posY = WindowHeight - Car.Size.Height;
+            var posX = graphics.PreferredBackBufferWidth / 2 - Car.Size.Width * 2;
+            var posY = graphics.PreferredBackBufferWidth - Car.Size.Height;
 
             Car.Position = new Vector2(posX - 100, posY - 200);
 
@@ -67,7 +64,7 @@ namespace _06___DriveFast
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            RoadManager.Update(gameTime, Car.Speed.Y);
+            RoadManager.Update(gameTime, GameSpeed);
             Car.Update(gameTime);
 
             base.Update(gameTime);
