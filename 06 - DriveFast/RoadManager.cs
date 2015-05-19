@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using GameHelpers.Classes;
+using GameHelpers.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -14,24 +15,26 @@ namespace _06___DriveFast
         //public List<Road> Roads = new List<Road>();
 
         public Road[] Roads;
-        public List<Hazard> Hazards = new List<Hazard>();
+        public List<Hazard> Hazards;
 
         private ContentManager contentManager;
-        private GraphicsDeviceManager graphics;
+        public GraphicsDeviceManager graphics;
 
         public static Texture2D RoadTexture;
         public static Texture2D HazardTexture;
 
         private readonly Random random = new Random();
 
-
-        public void LoadContent(ContentManager theContentManager, GraphicsDeviceManager theGraphics)
+        public void LoadContent(ContentManager theContentManager, List<Hazard> theHazards)
         {
             contentManager = theContentManager;
-            graphics = theGraphics;
 
             RoadTexture = contentManager.Load<Texture2D>("Sprites/" + Sprite.GetAssetName(typeof(Road)));
             HazardTexture = contentManager.Load<Texture2D>("Sprites/" + Sprite.GetAssetName(typeof(Hazard)));
+
+            graphics = GameServices.GetService<GraphicsDeviceManager>();
+
+            Hazards = theHazards;
         }
 
         public void Update(GameTime gameTime, float speed)
@@ -48,7 +51,7 @@ namespace _06___DriveFast
                     {
                         var minY = Roads.Min(r => r.Position.Y);
 
-                        road.Position.Y = minY - road.Size.Height + 1;
+                        road.Position = new Vector2(road.Position.X, minY - road.Size.Height + 1);
                     }
 
                     road.Update(gameTime);
@@ -63,14 +66,14 @@ namespace _06___DriveFast
 
                 foreach (var road in Roads)
                 {
-                    road.LoadContent(contentManager);
+                    road.LoadContent();
                 }
             }
 
             if (random.Next(400) == 5)
             {
                 var hazard = new Hazard(Vector2.Zero, new Vector2(0, speed));
-                hazard.LoadContent(contentManager);
+                hazard.LoadContent();
                 hazard.Position = new Vector2(random.Next(graphics.PreferredBackBufferWidth), 0);
                 Hazards.Add(hazard);
             }

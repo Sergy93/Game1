@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using GameHelpers.Interfaces;
 using Microsoft.Xna.Framework;
 
 namespace GameHelpers.Classes
@@ -20,7 +21,8 @@ namespace GameHelpers.Classes
                 MoveRight = 1;
         }
 
-        protected MovingSprite(Vector2 position, Vector2 speed, Vector2 direction, float scale = 1.0f)
+        protected MovingSprite(Vector2 position, Vector2 speed, Vector2 direction,
+            float scale = 1.0f)
             : base(position, scale)
         {
             Speed = speed;

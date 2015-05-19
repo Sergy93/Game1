@@ -25,15 +25,17 @@ namespace _06___DriveFast
         {
         }
 
+        public bool Collides(Hazard hazard)
+        {
+            var rectCar = new Rectangle((int)Position.X, (int)Position.Y, Size.X, Size.Y);
+            var rectHazard = new Rectangle((int)hazard.Position.X, (int)hazard.Position.Y, hazard.Size.X, hazard.Size.Y);
+
+            return rectCar.Intersects(rectHazard);
+        }
+
         public override void Update(GameTime theGameTime)
         {
             var currKeyboardState = Keyboard.GetState();
-
-            if (currKeyboardState.GetPressedKeys().Count() == 0)
-            {
-                Speed = Vector2.Zero;
-                Direction = Vector2.Zero;
-            }
 
             Move(currKeyboardState);
 
@@ -45,20 +47,42 @@ namespace _06___DriveFast
         {
             if (keyboardState.IsKeyDown(Keys.Left))
             {
-                Speed.X = MinSpeed;
-                Direction.X = MoveDirections.MoveLeft;
+                if (Position.X < -20)
+                {
+                    Speed.X = 0;
+                }
+                else
+                {
+                    Speed.X = MinSpeed;
+                    Direction.X = MoveDirections.MoveLeft;
+                }
             }
             else if (keyboardState.IsKeyDown(Keys.Right))
             {
-                Speed.X = MinSpeed;
-                Direction.X = MoveDirections.MoveRight;
+                if (Position.X >= GraphicsManager.PreferredBackBufferWidth)
+                {
+                    Speed.X = 0;
+                }
+                else
+                {
+                    Speed.X = MinSpeed;
+                    Direction.X = MoveDirections.MoveRight;
+                }
+            }
+            else
+            {
+                Speed.X = 0;
             }
 
             if (keyboardState.IsKeyDown(Keys.Up))
             {
                 Direction.Y = MoveDirections.MoveUp;
 
-                if (Position.Y > 0)
+                if (Position.Y <= 0)
+                {
+                    Speed.Y = 0;
+                }
+                else
                 {
                     if (Speed.Y == 0f)
                     {
@@ -73,16 +97,24 @@ namespace _06___DriveFast
                         Speed.Y = MaxSpeed;
                     }
                 }
-                else
-                {
-                    Speed = Vector2.Zero;
-                }
             }
             else if (keyboardState.IsKeyDown(Keys.Down))
             {
-                Speed.Y = MinSpeed;
-                Direction.Y = MoveDirections.MoveDown;
+                if (Position.Y >= GraphicsManager.PreferredBackBufferWidth)
+                {
+                    Speed.Y = 0;
+                }
+                else
+                {
+                    Speed.Y = MinSpeed;
+                    Direction.Y = MoveDirections.MoveDown;
+                }
             }
+            else
+            {
+                Speed.Y = 0;
+            }
+
         }
 
 

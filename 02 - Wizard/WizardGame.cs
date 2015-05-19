@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using GameHelpers.Classes;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -12,12 +13,17 @@ namespace _02___Wizard
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        readonly Wizard wizard = new Wizard();
+        private readonly Wizard wizard;
 
         public WizardGame()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
+            GameServices.AddService(graphics);
+            GameServices.AddService(Content);
+
+            wizard = new Wizard();
         }
 
 
@@ -25,7 +31,7 @@ namespace _02___Wizard
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            wizard.LoadContent(Content);
+            wizard.LoadContent();
         }
 
         protected override void Update(GameTime gameTime)

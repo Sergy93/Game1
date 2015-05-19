@@ -26,11 +26,11 @@ namespace _02___Wizard
         {
         }
 
-        public override void LoadContent(ContentManager theContentManager)
+        public override void LoadContent()
         {
             Scale = 0.3f;
             MaxDistance = 300;
-            base.LoadContent(theContentManager);
+            base.LoadContent();
         }
 
         public override void Update(GameTime theGameTime)

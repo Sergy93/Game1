@@ -42,10 +42,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Classes\Attributes\AssetNameAttr.cs" />
+    <Compile Include="Classes\GameServices.cs" />
     <Compile Include="Classes\MovingSprite.cs" />
     <Compile Include="Classes\FixedSprite.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Interfaces\IJumper.cs" />
+    <Compile Include="Interfaces\ISolid.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Classes\Sprite.cs" />
   </ItemGroup>

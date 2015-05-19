@@ -54,13 +54,12 @@ namespace _02___Wizard
 
 
         //LOAD
-        public override void LoadContent(ContentManager contentMg)
+        public override void LoadContent()
         {
 
-            contentManager = contentMg;
             Position = new Vector2(StartY, StartX);
 
-            base.LoadContent(contentMg);
+            base.LoadContent();
             SourceOnSprite = new Rectangle(0, 0, 200, SourceOnSprite.Height);
         }
 
@@ -150,7 +149,7 @@ namespace _02___Wizard
                     }
                     if (Position.Y > StartingPosition.Y)
                     {
-                        Position.Y = StartingPosition.Y;
+                        Position = new Vector2(Position.X, StartingPosition.Y);
                         currState = State.Walking;
                     }
                     break;
@@ -191,7 +190,7 @@ namespace _02___Wizard
             if (Fireballs.All(fb => fb.Visible))
             {
                 var aFireball = new Fireball();
-                aFireball.LoadContent(contentManager);
+                aFireball.LoadContent();
 
                 Fireballs.Add(aFireball);
             }

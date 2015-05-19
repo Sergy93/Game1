@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using GameHelpers.Classes.Attributes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -11,45 +10,33 @@ namespace GameHelpers.Classes
     {
         public Texture2D SpriteTexture { get; protected set; }
 
-        public Rectangle Size { get; protected set; }
-
-        public Vector2 Position;
+        public Rectangle Size { get; set; }
+        public Rectangle SourceOnSprite { get; set; }
 
         protected string AssetName { get; set; }
 
-        private GraphicsDeviceManager graphics;
+        public float Scale { get; set; }
 
-
-        //Properties
-        private Rectangle mSourceOnSprite;
-        public Rectangle SourceOnSprite
+        private Vector2 position;
+        public Vector2 Position
         {
-            get { return mSourceOnSprite; }
+            get { return position; }
             set
             {
-                mSourceOnSprite = value;
-                Size = new Rectangle(0, 0, (int)(mSourceOnSprite.Width * Scale), (int)(mSourceOnSprite.Height * Scale));
+                position = value;
+                Size.Offset(position);
             }
         }
 
-
-
-        private float mScale;
-        public float Scale
-        {
-            get { return mScale; }
-            set
-            {
-                mScale = value;
-                //Recalculate the Size of the Sprite with the new scale
-                Size = new Rectangle(0, 0, (int)(SourceOnSprite.Width * Scale), (int)(SourceOnSprite.Height * Scale));
-            }
-        }
-
+        protected GraphicsDeviceManager GraphicsManager;
+        protected ContentManager Content;
 
         //CONSTRUCTORS
         protected Sprite(Vector2 position, float scale = 1.0f)
         {
+
+            GraphicsManager = GameServices.GetService<GraphicsDeviceManager>();
+            Content = GameServices.GetService<ContentManager>();
 
             var thisType = GetType();
 
@@ -58,17 +45,17 @@ namespace GameHelpers.Classes
                 throw new InvalidOperationException("Must implement AssetNameAttr");
             }
 
-
             AssetName = GetAssetName(thisType);
             Position = position;
             Scale = scale;
         }
 
         //LOAD
-        public virtual void LoadContent(ContentManager contentmanager)
+        public virtual void LoadContent()
         {
-            SpriteTexture = contentmanager.Load<Texture2D>("Sprites/" + AssetName);
+            SpriteTexture = Content.Load<Texture2D>("Sprites/" + AssetName);
             SourceOnSprite = new Rectangle(0, 0, SpriteTexture.Width, SpriteTexture.Height);
+            Size.Inflate(SourceOnSprite.Width / 2, SourceOnSprite.Height / 2);
         }
 
 
@@ -89,7 +76,6 @@ namespace GameHelpers.Classes
             spriteBatch.Draw(SpriteTexture, Position, SourceOnSprite,
                 Color.White, 0.0f, Vector2.Zero, Scale, effect, 0);
         }
-
 
         public static string GetAssetName(Type type)
         {
