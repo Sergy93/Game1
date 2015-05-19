@@ -17,13 +17,14 @@ namespace _02___Wizard
     {
         public int MaxDistance { get; set; }
 
-        public bool Visible;
+        public bool NeedsRemoval;
 
         public Vector2 StartingPosition { get; set; }
 
-        public Fireball()
-            : base(Vector2.Zero, Vector2.Zero, Vector2.Zero)
+        public Fireball(Vector2 theStartPosition, Vector2 theSpeed, Vector2 theDirection)
+            : base(theStartPosition, theSpeed, theDirection)
         {
+            StartingPosition = theStartPosition;
         }
 
         public override void LoadContent()
@@ -35,33 +36,19 @@ namespace _02___Wizard
 
         public override void Update(GameTime theGameTime)
         {
+            base.Update(theGameTime);
+
             if (Vector2.Distance(StartingPosition, Position) > MaxDistance)
             {
-                Visible = false;
-            }
-
-            if (Visible)
-            {
-                base.Update(theGameTime);
+                NeedsRemoval = true;
             }
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
             var effect = Direction.X.Equals(1) ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
-            if (Visible)
-            {
-                base.Draw(spriteBatch, effect);
-            }
+            base.Draw(spriteBatch, effect);
         }
 
-        public void Fire(Vector2 theStartPosition, Vector2 theSpeed, Vector2 theDirection)
-        {
-            Position = theStartPosition;
-            StartingPosition = theStartPosition;
-            Speed = theSpeed;
-            Direction = theDirection;
-            Visible = true;
-        }
     }
 }

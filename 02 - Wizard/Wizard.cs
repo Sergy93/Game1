@@ -33,8 +33,6 @@ namespace _02___Wizard
 
         private KeyboardState prevKeyboardState;
 
-        private ContentManager contentManager;
-
         //Used for jumping
         public Vector2 StartingPosition { get; set; }
 
@@ -181,26 +179,21 @@ namespace _02___Wizard
                 fireball.Update(theGameTime);
             }
 
+            Fireballs.RemoveAll(f => f.NeedsRemoval);
+
             if (currState != State.Walking ||
                 !aCurrentKeyboardState.IsKeyDown(Keys.RightControl) ||
                 prevKeyboardState.IsKeyDown(Keys.RightControl))
                 return;
 
 
-            if (Fireballs.All(fb => fb.Visible))
-            {
-                var aFireball = new Fireball();
-                aFireball.LoadContent();
-
-                Fireballs.Add(aFireball);
-            }
 
             var direction = lookingRight ? new Vector2(1, 0) : new Vector2(-1, 0);
-            foreach (var fireball in Fireballs.Where(fb => fb.Visible == false))
-            {
-                fireball.Fire(Position + new Vector2(Size.Width / 3, Size.Height / 2), new Vector2(200, 0), direction);
-            }
 
+            var aFireball = new Fireball(Position + new Vector2(Size.Width, Size.Height), new Vector2(200, 0), direction);
+            aFireball.LoadContent();
+
+            Fireballs.Add(aFireball);
         }
 
     }

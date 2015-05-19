@@ -11,7 +11,21 @@ namespace GameHelpers.Classes
         public Texture2D SpriteTexture { get; protected set; }
 
         public Rectangle Size { get; set; }
-        public Rectangle SourceOnSprite { get; set; }
+
+        protected GraphicsDeviceManager GraphicsManager;
+        protected ContentManager Content;
+
+        private Rectangle sourceOnSprite;
+        public Rectangle SourceOnSprite
+        {
+            get { return sourceOnSprite; }
+            set
+            {
+                sourceOnSprite = value;
+                Size = new Rectangle(0, 0, sourceOnSprite.Width / 2, sourceOnSprite.Height / 2);
+                Size.Offset(position);
+            }
+        }
 
         protected string AssetName { get; set; }
 
@@ -28,8 +42,6 @@ namespace GameHelpers.Classes
             }
         }
 
-        protected GraphicsDeviceManager GraphicsManager;
-        protected ContentManager Content;
 
         //CONSTRUCTORS
         protected Sprite(Vector2 position, float scale = 1.0f)
@@ -46,6 +58,7 @@ namespace GameHelpers.Classes
             }
 
             AssetName = GetAssetName(thisType);
+
             Position = position;
             Scale = scale;
         }
@@ -55,7 +68,7 @@ namespace GameHelpers.Classes
         {
             SpriteTexture = Content.Load<Texture2D>("Sprites/" + AssetName);
             SourceOnSprite = new Rectangle(0, 0, SpriteTexture.Width, SpriteTexture.Height);
-            Size.Inflate(SourceOnSprite.Width / 2, SourceOnSprite.Height / 2);
+            //Size.Inflate(SourceOnSprite.Width / 2, SourceOnSprite.Height / 2);
         }
 
 
