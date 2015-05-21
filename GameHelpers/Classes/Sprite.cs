@@ -22,8 +22,8 @@ namespace GameHelpers.Classes
             set
             {
                 sourceOnSprite = value;
-                Size = new Rectangle(0, 0, sourceOnSprite.Width / 2, sourceOnSprite.Height / 2);
-                Size.Offset(position);
+                Size = new Rectangle((int)position.X, (int)position.Y,
+                    sourceOnSprite.Width / 2, sourceOnSprite.Height / 2);
             }
         }
 
@@ -38,7 +38,8 @@ namespace GameHelpers.Classes
             set
             {
                 position = value;
-                Size.Offset(position);
+                Size = new Rectangle((int)position.X, (int)position.Y,
+                     sourceOnSprite.Width / 2, sourceOnSprite.Height / 2);
             }
         }
 
@@ -50,16 +51,18 @@ namespace GameHelpers.Classes
             GraphicsManager = GameServices.GetService<GraphicsDeviceManager>();
             Content = GameServices.GetService<ContentManager>();
 
-            var thisType = GetType();
+            var childType = GetType();
 
-            if (thisType.IsDefined(typeof(AssetNameAttr), false) == false)
+            //Check if the current child has the mandatory AssetName attribute defined, else we throw an exception
+            if (childType.IsDefined(typeof(AssetNameAttr), false) == false)
             {
                 throw new InvalidOperationException("Must implement AssetNameAttr");
             }
 
-            AssetName = GetAssetName(thisType);
+            AssetName = GetAssetName(childType);
 
             Position = position;
+
             Scale = scale;
         }
 
@@ -68,7 +71,6 @@ namespace GameHelpers.Classes
         {
             SpriteTexture = Content.Load<Texture2D>("Sprites/" + AssetName);
             SourceOnSprite = new Rectangle(0, 0, SpriteTexture.Width, SpriteTexture.Height);
-            //Size.Inflate(SourceOnSprite.Width / 2, SourceOnSprite.Height / 2);
         }
 
 

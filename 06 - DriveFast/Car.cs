@@ -7,30 +7,33 @@ using GameHelpers.Classes;
 using GameHelpers.Classes.Attributes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using GameHelpers.Extensions;
+using GameHelpers.Interfaces;
+
 
 namespace _06___DriveFast
 {
     [AssetNameAttr("Car")]
-    public class Car : MovingSprite
+    public class Car : MovingSprite, ICollider
     {
-        private const float scale = 0.3f;
+        private const float TheScale = 0.3f;
 
         private const float MinSpeed = 100f;
         private const float MaxSpeed = 1000f;
 
         private const float Acceleration = 5f;
 
+        private readonly GraphicsDeviceManager theGraphics;
+
         public Car(Vector2 position, Vector2 speed, Vector2 direction)
-            : base(position, speed, direction, scale)
+            : base(position, speed, direction, TheScale)
         {
+            theGraphics = GameServices.GetService<GraphicsDeviceManager>();
         }
 
-        public bool Collides(Hazard hazard)
+        public bool CheckCollisions(Sprite hazard)
         {
-            var rectCar = new Rectangle((int)Position.X, (int)Position.Y, Size.X, Size.Y);
-            var rectHazard = new Rectangle((int)hazard.Position.X, (int)hazard.Position.Y, hazard.Size.X, hazard.Size.Y);
-
-            return rectCar.Intersects(rectHazard);
+            return Size.Intersects(hazard.Size);
         }
 
         public override void Update(GameTime theGameTime)
@@ -38,6 +41,12 @@ namespace _06___DriveFast
             var currKeyboardState = Keyboard.GetState();
 
             Move(currKeyboardState);
+
+
+            var fixedX = MathHelper.Clamp(Position.X, 0, theGraphics.PreferredBackBufferWidth - Size.Width / 2);
+            var fixedY = MathHelper.Clamp(Position.Y, 0, theGraphics.PreferredBackBufferHeight - Size.Height / 2);
+
+            Position = new Vector2(fixedX, fixedY);
 
             base.Update(theGameTime);
 
@@ -47,27 +56,15 @@ namespace _06___DriveFast
         {
             if (keyboardState.IsKeyDown(Keys.Left))
             {
-                if (Position.X < -20)
-                {
-                    Speed.X = 0;
-                }
-                else
-                {
-                    Speed.X = MinSpeed;
-                    Direction.X = MoveDirections.MoveLeft;
-                }
+                Speed.X = MinSpeed;
+                Direction.X = MoveDirections.MoveLeft;
+
             }
             else if (keyboardState.IsKeyDown(Keys.Right))
             {
-                if (Position.X >= GraphicsManager.PreferredBackBufferWidth)
-                {
-                    Speed.X = 0;
-                }
-                else
-                {
-                    Speed.X = MinSpeed;
-                    Direction.X = MoveDirections.MoveRight;
-                }
+                Speed.X = MinSpeed;
+                Direction.X = MoveDirections.MoveRight;
+
             }
             else
             {
@@ -78,25 +75,19 @@ namespace _06___DriveFast
             {
                 Direction.Y = MoveDirections.MoveUp;
 
-                if (Position.Y <= 0)
+                if (Speed.Y.FloatEquals(0f))
                 {
-                    Speed.Y = 0;
+                    Speed.Y = MinSpeed;
+                }
+                else if (Speed.Y <= MaxSpeed)
+                {
+                    Speed.Y += Acceleration;
                 }
                 else
                 {
-                    if (Speed.Y == 0f)
-                    {
-                        Speed.Y = MinSpeed;
-                    }
-                    else if (Speed.Y <= MaxSpeed)
-                    {
-                        Speed.Y += Acceleration;
-                    }
-                    else
-                    {
-                        Speed.Y = MaxSpeed;
-                    }
+                    Speed.Y = MaxSpeed;
                 }
+
             }
             else if (keyboardState.IsKeyDown(Keys.Down))
             {
@@ -116,7 +107,5 @@ namespace _06___DriveFast
             }
 
         }
-
-
     }
 }

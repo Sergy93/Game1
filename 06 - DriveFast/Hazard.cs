@@ -11,13 +11,13 @@ using Microsoft.Xna.Framework;
 namespace _06___DriveFast
 {
     [AssetNameAttr("Hazard")]
-    public class Hazard : MovingSprite, ISolid
+    public class Hazard : MovingSprite
     {
 
-        private readonly static Vector2 direction = new Vector2(0, MoveDirections.MoveDown);
+        private readonly static Vector2 TheDirection = new Vector2(0, MoveDirections.MoveDown);
 
         public Hazard(Vector2 position, Vector2 speed)
-            : base(position, speed, direction, 0.7f)
+            : base(position, speed, TheDirection, 0.6f)
         {
         }
 

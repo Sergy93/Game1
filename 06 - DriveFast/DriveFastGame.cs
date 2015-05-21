@@ -70,7 +70,7 @@ namespace _06___DriveFast
 
             foreach (var hazard in Hazards)
             {
-                if (car.Collides(hazard))
+                if (car.CheckCollisions(hazard))
                 {
                     Exit();
                 }
