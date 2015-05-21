@@ -69,7 +69,7 @@ namespace GameHelpers.Classes
         //LOAD
         public virtual void LoadContent()
         {
-            SpriteTexture = Content.Load<Texture2D>("Sprites/" + AssetName);
+            SpriteTexture = Content.Load<Texture2D>(AssetName);
             SourceOnSprite = new Rectangle(0, 0, SpriteTexture.Width, SpriteTexture.Height);
         }
 

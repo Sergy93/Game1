@@ -13,7 +13,7 @@ using GameHelpers.Interfaces;
 
 namespace _06___DriveFast
 {
-    [AssetNameAttr("Car")]
+    [AssetNameAttr("Sprites/Car")]
     public class Car : MovingSprite, ICollider
     {
         private const float TheScale = 0.3f;

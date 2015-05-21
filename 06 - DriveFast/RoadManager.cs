@@ -33,8 +33,8 @@ namespace _06___DriveFast
         {
             contentManager = theContentManager;
 
-            RoadTexture = contentManager.Load<Texture2D>("Sprites/" + Sprite.GetAssetName(typeof(Road)));
-            HazardTexture = contentManager.Load<Texture2D>("Sprites/" + Sprite.GetAssetName(typeof(Hazard)));
+            RoadTexture = contentManager.Load<Texture2D>(Sprite.GetAssetName(typeof(Road)));
+            HazardTexture = contentManager.Load<Texture2D>(Sprite.GetAssetName(typeof(Hazard)));
 
             ThisGraphics = GameServices.GetService<GraphicsDeviceManager>();
 

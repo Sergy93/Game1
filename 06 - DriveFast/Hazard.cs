@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework;
 
 namespace _06___DriveFast
 {
-    [AssetNameAttr("Hazard")]
+    [AssetNameAttr("Sprites/Hazard")]
     public class Hazard : MovingSprite
     {
 

@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace _06___DriveFast
 {
-    [AssetNameAttr("Road")]
+    [AssetNameAttr("Sprites/Road")]
     public class Road : MovingSprite
     {
         public Road(Vector2 speed, Vector2 position)
